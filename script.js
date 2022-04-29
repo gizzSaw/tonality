@@ -1,11 +1,51 @@
-const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',];
+//const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',];
+let notes = [];
 
-console.log("Ля Минор: ", getScale('A', "min"));
-console.log("До Мажор: ", getScale('C', "maj"));
-console.log("Си Блюз: ", getScale('B'));
+let notesHTML = document.querySelectorAll('.note');
+let ladHTML = document.querySelectorAll('.lad');
+let selectedNote, selectedLad;
+
+document.querySelector('.button3').addEventListener('click', out)
+
+// console.log("Ля Минор: ", getScale('A', "min"));
+// console.log("До Мажор: ", getScale('C', "maj"));
+// console.log("Си Блюз: ", getScale('B'));
 
 
+function getNotes() { // получем массив нот из хтмл
+    for (let i = 0; i < notesHTML.length; i++) {
+        notes.push(notesHTML[i].value)
+    }
+}
+function getSelectedNote() { //получаем выбранную ноту
+    for (let i = 0; i < notesHTML.length; i++) {
+        if (notesHTML[i].checked) {
+            selectedNote = notesHTML[i].value;
+        }
+    }
+    return selectedNote;
+}
+function getSelectedLad() { //получаем выбранную гамму
+    for (let i = 0; i < ladHTML.length; i++) {
+        if (ladHTML[i].checked) {
+            selectedLad = ladHTML[i].value;
+        }
+    }
+    return selectedLad;
+}
+function out() { //выводим в консоль
+    getSelectedNote();
+    getSelectedLad();
+    let out = document.querySelector('.out-block');
+    if(selectedNote && selectedLad) {
+        console.log("Результат ", getScale(selectedNote, selectedLad));
+        out.innerHTML = `Результат ${getScale(selectedNote, selectedLad).join(' ')}`
+    } else {
+        console.log("Ми блюзовая гамма ", getScale('E', 'blues'));
+    }
+}
 function getScale(note, lad) {
+    getNotes(); // получаем ноты для дальнейшей работы из хтмл
     const index = notes.indexOf(note);
 
     let int2, int3, int4, int5, int6, int7 = 0;
@@ -24,7 +64,7 @@ function getScale(note, lad) {
         int5 = 7;
         int6 = 8;
         int7 = 10;
-    } else {
+    } else if (lad ==="blues") {
         int2 = 2;
         int3 = 3;
         int4 = 5;
@@ -44,20 +84,4 @@ function getScale(note, lad) {
     // console.log(res);
     return res
 }
-
-
-
-
-
-
-// function getResult(note) {
-//     const p = document.querySelector('p');
-//     p.innerHTML = getMajorScale(note);
-
-// }
-
-// for (let i = 0; i < notes.length; i++) {
-//     getScale(notes[i], "min")
-// }
-
 
