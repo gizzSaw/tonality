@@ -5,7 +5,8 @@ let notesHTML = document.querySelectorAll('.note');
 let ladHTML = document.querySelectorAll('.lad');
 let selectedNote, selectedLad;
 
-document.querySelector('.button3').addEventListener('click', out)
+document.querySelector('.button1').addEventListener('click', outNotes);
+document.querySelector('.button2').addEventListener('click', outChords);
 
 // console.log("Ля Минор: ", getScale('A', "min"));
 // console.log("До Мажор: ", getScale('C', "maj"));
@@ -33,17 +34,9 @@ function getSelectedLad() { //получаем выбранную гамму
     }
     return selectedLad;
 }
-function out() { //выводим в консоль
-    getSelectedNote();
-    getSelectedLad();
-    let out = document.querySelector('.out-block');
-    if(selectedNote && selectedLad) {
-        console.log("Результат ", getScale(selectedNote, selectedLad));
-        out.innerHTML = `Результат ${getScale(selectedNote, selectedLad).join(' ')}`
-    } else {
-        console.log("Ми блюзовая гамма ", getScale('E', 'blues'));
-    }
-}
+
+
+
 function getScale(note, lad) {
     getNotes(); // получаем ноты для дальнейшей работы из хтмл
     const index = notes.indexOf(note);
@@ -73,15 +66,77 @@ function getScale(note, lad) {
         int7 = 10;
     }
 
-    const step1 = notes[index]; // 	Прима
-    const step2 = notes[index + int2] ? notes[index + int2] : notes[index + int2 - 12]; // Секунда
-    const step3 = notes[index + int3] ? notes[index + int3] : notes[index + int3 - 12]; // Терция
-    const step4 = notes[index + int4] ? notes[index + int4] : notes[index + int4 - 12]; // Кварта 
-    const step5 = notes[index + int5] ? notes[index + int5] : notes[index + int5 - 12]; // Квинта
-    const step6 = notes[index + int6] ? notes[index + int6] : notes[index + int6 - 12]; // Секста
-    const step7 = notes[index + int7] ? notes[index + int7] : notes[index + int7 - 12]; // Септима
+    const step1 = notes[index];                                                           // Прима
+    const step2 = notes[index + int2] ? notes[index + int2] : notes[index + int2 - 12];   // Секунда
+    const step3 = notes[index + int3] ? notes[index + int3] : notes[index + int3 - 12];   // Терция
+    const step4 = notes[index + int4] ? notes[index + int4] : notes[index + int4 - 12];   // Кварта 
+    const step5 = notes[index + int5] ? notes[index + int5] : notes[index + int5 - 12];   // Квинта
+    const step6 = notes[index + int6] ? notes[index + int6] : notes[index + int6 - 12];   // Секста
+    const step7 = notes[index + int7] ? notes[index + int7] : notes[index + int7 - 12];   // Септима
     let res = [step1, step2, step3, step4, step5, step6, step7];
-    // console.log(res);
+    //console.log(res);
     return res
 }
 
+function getChords(note, lad) {
+    const notes = getScale(note, lad);
+    let chords = [];
+    
+    if (lad === 'maj') {
+        for (let i = 0; i < notes.length; i++) {
+            if(i === 1 || i === 2 ||  i === 5) {              // выборка миноров
+                chords.push(notes[i].concat('m'));
+            } else if (i === 0 || i === 3 || i === 4) {       //выборка мажоров
+                chords.push(notes[i]);
+            } else if (i === 6){
+                chords.push(notes[i].concat('dim'));          // один уменьшенный
+            }
+        }
+    } else if (lad === 'min') {
+        for (let i = 0; i < notes.length; i++) {
+            if(i === 0 || i === 3 ||  i === 4) {              // выборка миноров
+                chords.push(notes[i].concat('m'));
+            } else if (i === 2 || i === 5 || i === 6) {       //выборка мажоров
+                chords.push(notes[i]);
+            } else if (i === 1){                              // один уменьшенный
+                chords.push(notes[i].concat('dim'));
+            } 
+        }
+    } else {
+        console.log(note + ' блюзовая гамма без аккордов');
+        return
+    }
+    return chords;
+}
+
+
+console.log(getChords('D', "blues"));
+console.log(getChords('C', "maj"));
+console.log(getChords('A', "min"));
+
+// минор 0 3 4
+// мажор 2 5 6
+// уменьшенный 1
+
+
+// ====== Функции вывода ======
+function outNotes() { //выводим ноты по нажатию
+    getSelectedNote();
+    getSelectedLad();
+    let out = document.querySelector('.out-block');
+    if(selectedNote && selectedLad) {
+        out.innerHTML = `Результат ${getScale(selectedNote, selectedLad).join(' ')}`
+    } else {
+        console.log("Ми блюзовая гамма ", getScale('E', 'blues'));
+    }
+}
+function outChords() { //выводим аккорды по нажатию
+    getSelectedNote();
+    getSelectedLad();
+    let out = document.querySelector('.out-block');
+    if(selectedNote && selectedLad) {
+        out.innerHTML = `Результат ${getChords(selectedNote, selectedLad).join(' ')}`
+    } else {
+        console.log("Ми блюзовая гамма ", getChords('E', 'blues'));
+    }
+}
