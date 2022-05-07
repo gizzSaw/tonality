@@ -8,11 +8,6 @@ let selectedNote, selectedLad;
 document.querySelector('.button1').addEventListener('click', outNotes);
 document.querySelector('.button2').addEventListener('click', outChords);
 
-// console.log("Ля Минор: ", getScale('A', "min"));
-// console.log("До Мажор: ", getScale('C', "maj"));
-// console.log("Си Блюз: ", getScale('B'));
-
-
 function getNotes() { // получем массив нот из хтмл
     for (let i = 0; i < notesHTML.length; i++) {
         notes.push(notesHTML[i].value)
@@ -104,15 +99,13 @@ function getChords(note, lad) {
         }
     } else {
         console.log(note + ' блюзовая гамма без аккордов');
-        return
+        chords = ['отсутствует'];
     }
     return chords;
 }
 
 
-console.log(getChords('D', "blues"));
-console.log(getChords('C', "maj"));
-console.log(getChords('A', "min"));
+
 
 // минор 0 3 4
 // мажор 2 5 6
@@ -125,7 +118,7 @@ function outNotes() { //выводим ноты по нажатию
     getSelectedLad();
     let out = document.querySelector('.out-block');
     if(selectedNote && selectedLad) {
-        out.innerHTML = `Результат ${getScale(selectedNote, selectedLad).join(' ')}`
+        out.innerHTML = `Результат ${getScale(selectedNote, selectedLad).join(' ')}`;
     } else {
         console.log("Ми блюзовая гамма ", getScale('E', 'blues'));
     }
@@ -134,9 +127,17 @@ function outChords() { //выводим аккорды по нажатию
     getSelectedNote();
     getSelectedLad();
     let out = document.querySelector('.out-block');
-    if(selectedNote && selectedLad) {
-        out.innerHTML = `Результат ${getChords(selectedNote, selectedLad).join(' ')}`
+    if(selectedNote && selectedLad ) {
+        out.innerHTML = `Результат ${getChords(selectedNote, selectedLad).join(' ')}`;
     } else {
-        console.log("Ми блюзовая гамма ", getChords('E', 'blues'));
+        out.innerHTML = "";
     }
 }
+
+// ====== тесты ======
+// console.log("Ля Минор: ", getScale('A', "min"));
+// console.log("До Мажор: ", getScale('C', "maj"));
+// console.log("Си Блюз: ", getScale('B'));
+// console.log(getChords('D', "blues"));
+// console.log(getChords('C', "maj"));
+// console.log(getChords('A', "min"));
